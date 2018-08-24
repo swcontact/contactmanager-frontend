@@ -1,3 +1,9 @@
 {
-    "url": "http://localhost:5000/api/contact"
+    "url": "http://localhost:51295/api/contacts",
+    "getAll": "/GetContacts",
+    "getPage": "/Page",
+    "getById": "/GetContact",
+    "updateContact": "/PutContact",
+    "createContact": "/PostContact",
+    "deleteContact": "/DeleteContact"
 }

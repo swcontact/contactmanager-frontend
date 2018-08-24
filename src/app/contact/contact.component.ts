@@ -43,13 +43,13 @@ export class ContactComponent implements OnInit {
         if (contact !== undefined && contact !== null){
           this.contact = contact;
         }else{
-          this.contact = new Contact();
+          //this.contact = new Contact();
         }
         //console.log(this.contact);
       });
     }else{
       this.contactId = 0;
-      this.contact = new Contact();
+      //this.contact = new Contact();
     }
   }
 

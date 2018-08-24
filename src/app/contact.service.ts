@@ -25,7 +25,13 @@ export class ContactService {
   }
 
   public createContact(url, data) {
-    const httpHeader = new HttpHeaders({});
+    console.log(url);
+    console.log(data);
+    const httpHeader = new HttpHeaders({'Content-Type': 'application/json'});
+    const httpOptions = { headers: httpHeader };
+    let result = this.http.post<any>(url, data, httpOptions).pipe(catchError(this.handleError));
+    console.log(result);
+    return result;
   }
 
   private handleError(error: HttpErrorResponse) {

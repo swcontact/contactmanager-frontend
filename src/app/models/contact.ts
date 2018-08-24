@@ -1,19 +1,20 @@
 export class Contact {
-    public id: number;
-    public firstName: string;
-    public lastName: string;
-    public contactCategory: string;
-    public birthday: Date;
-    public email: string;
-    public telephone: string;
-
+    public ID: number;
+    public FirstName: string;
+    public LastName: string;
+    public Category: string;
+    public Profile: string;
+    public Email: string;
+    public Birthday: string;
+    public Telephone: string;
     constructor() {
-        this.id = 0;
-        this.firstName = '';
-        this.lastName = '';
-        this.contactCategory = 'Customer';
-        this.birthday = new Date();
-        this.email = '';
-        this.telephone = '';
+        this.ID = 0;
+        this.FirstName = "";
+        this.LastName = "";
+        this.Category = "Customer";
+        this.Profile = "";
+        this.Email = "";
+        this.Birthday = "";
+        this.Telephone = "";
     }
 }

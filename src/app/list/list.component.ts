@@ -13,26 +13,30 @@ export class ListComponent implements OnInit {
   pageSize: number = 5;
   totalCount: number = 0;
   contacts: any;
+  loading: boolean = false;
 
   constructor (private service: ContactService) { }
 
   ngOnInit() {
+    this.loading = true;
     this.service
       .getConfig().subscribe(config => {
         this.config = config;
         this.service
-        .getAllContacts(this.config['url'])
+        .getAllContacts(this.config['url'] + this.config['getAll'])
         .subscribe(contacts => {
           this.contacts = contacts;
-          //console.log(contacts);
+          this.loading = false;
+          console.log(contacts);
         });
   
       });
   }
 
-  getInfo(contact) {
+  getProfileInfo(contact) {
     //console.log("get info");
     //console.log(contact);
+    /*
     let result: string = '';
     if (contact.email.length > 0) {
       result += contact.email;
@@ -45,6 +49,7 @@ export class ListComponent implements OnInit {
     }
 
     return result;
+    */
   }
 
   onDelete(contact: any) {
