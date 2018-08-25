@@ -1,8 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.min.css';
 
-div h1 {
+div p.header {
     text-align: center;
     font-size: 25px;
     margin-top: 15px;
+}
+.sub-title .row .col-sm-6 span {
+    font-weight: bolder;
+    font-size: 20px;
+    color: lightblue;
+}
+.sub-title .row .col-sm-6 a {
+    float: right;
 }

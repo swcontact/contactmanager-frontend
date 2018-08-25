@@ -1,26 +1,34 @@
 <a routerLink="/create">Create New Contact</a>
 
-<div *ngIf="contacts">
+<div class="container" *ngIf="somethingWrong.length > 0">
+  <div class="row">
+    <div class="col text-danger">
+      {{somethingWrong}}, Please refresh/reload the page.
+    </div>
+  </div>
+</div>
+
+<div *ngIf="totalCount > 0">
   <table class="table table-striped">
     <thead>
       <tr>
         <th>First Name</th>
         <th>Last Name</th>
         <th>Category</th>
-        <th>Profile</th>
+        <th>Contact</th>
         <th>Action</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let contact of contacts">
-        <td>{{contact.FirstName}}</td>
-        <td>{{contact.LastName}}</td>
-        <td>{{contact.Category}}</td>
-        <td>{{contact.Profile}}</td>
+        <td>{{contact.firstName}}</td>
+        <td>{{contact.lastName}}</td>
+        <td>{{contact.category}}</td>
+        <td>{{contact.contact}}</td>
         <td>
           <nav>
-            <a class="action-link" routerLink="/contact/{{contact.ID}}">Edit</a>
-            <a class="action-link" href="javascript:;" (click)="onDelete(contact)">Remove</a>
+            <a class="action-link" routerLink="/edit/{{contact.id}}">Edit</a>
+            <a class="action-link" routerLink="/delete/{{contact.id}}" (click)="onDelete(contact.id)">Remove</a>
           </nav>
         </td>
       </tr>
@@ -28,15 +36,15 @@
   </table>
   <div class="container">
     <div class="row">
-      <div class="col prev"><a href="#">Prev</a></div>
-      <div class="col middle">page {{1}} of {{10}}</div>
-      <div class="col next"><a href="#">Next</a></div>
+      <div class="col prev"><button class="btn btn-primary btn-sm" [disabled]="previousPage == currentPage" (click)=gotoPage(previousPage)>Prev</button></div>
+      <div class="col middle">Page {{currentPage}} of {{totalPage}}, Total Records: {{totalCount}}</div>
+      <div class="col next"><button class="btn btn-primary btn-sm" [disabled]="nextPage == currentPage" (click)=gotoPage(nextPage)>Next</button></div>
     </div>
   </div>
 </div>
 
-<div *ngIf="!contacts && !loading">
-  <p>Please create new contact by clicking above link.</p>
+<div *ngIf="totalCount <= 0 && !loading">
+  <p>No record found. Please create new contact by clicking above link.</p>
 </div>
 
 <div *ngIf="loading">

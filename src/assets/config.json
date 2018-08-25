@@ -1,5 +1,5 @@
 {
-    "url": "http://localhost:51295/api/contacts",
+    "url": "http://localhost:5000/api/contacts",
     "getAll": "/GetContacts",
     "getPage": "/Page",
     "getById": "/GetContact",

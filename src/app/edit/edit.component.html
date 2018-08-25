@@ -1,3 +1,91 @@
-<p>
-  edit works!
-</p>
+<div class="container sub-title">
+  <div class="row">
+    <div class="col-sm-6"><span>Edit Contact</span></div>
+    <div class="col-sm-6"><a routerLink="/list">Back to List</a></div>
+  </div>
+</div>
+
+<div class="container" *ngIf="somethingWrong.length > 0">
+  <div class="row">
+    <div class="col text-danger">
+      {{somethingWrong}}, Please refresh/reload the page.
+    </div>
+  </div>
+</div>
+
+<hr>
+
+<div class="container error-message" *ngIf="!formValid">
+  <div class="row" *ngIf="!firstNameValid">
+    <div class="col">First Name is invalid!</div>
+  </div>
+  <div class="row" *ngIf="!lastNameValid">
+    <div class="col">Last Name is invalid!</div>
+  </div>
+
+  <div *ngIf="contact.category == 'Customer'">
+    <div class="row" *ngIf="!emailValid">
+      <div class="col">Email is invalid!</div>
+    </div>
+    <div class="row" *ngIf="!birthdayValid">
+      <div class="col">Birthday is invalid!</div>
+    </div>
+  </div>
+  <div *ngIf="contact.category == 'Suppiler'">
+    <div class="row" *ngIf="!telephoneValid">
+      <div class="col">Telephone is invalid!</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+    <input type="hidden" id="id" name="id" [(ngModel)]="contact.id" />
+      
+      <div class="form-group">
+        <label for="firstName">First Name</label>
+        <input type="text" id="firstName" name="firstName" class="form-control" [(ngModel)]="contact.firstName" required #firstName="ngModel"/>
+        <div [hidden]="firstName.valid || firstName.pristine" class="alert alert-danger">First Name is required</div>
+      </div>
+  
+      <div class="form-group">
+        <label for="lastName">Last Name</label>
+        <input type="text" id="lastName" name="lastName" class="form-control" [(ngModel)]="contact.lastName" required #lastName="ngModel"/>
+        <div [hidden]="lastName.valid || lastName.pristine" class="alert alert-danger">Last Name is required</div>
+      </div>
+  
+      <div class="form-group">
+        <input type="radio" id="customer" name="category" value="Customer" [checked]="contact.category == 'Customer'" (change)="onChangeOfContactCategory('Customer')" />
+        <label class="radio-inline" for="customer">Customer</label>
+        <input type="radio" id="supplier" name="category" value="Supplier" [checked]="contact.category == 'Supplier'" (change)="onChangeOfContactCategory('Supplier')" />
+        <label class="radio-inline" for="supplier">Supplier</label>
+      </div>
+  
+      <div *ngIf="contact.category == 'Customer'">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" class="form-control" [(ngModel)]="contact.email" required pattern="([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+" #email="ngModel"/>
+          <div [hidden]="email.valid || email.pristine" class="alert alert-danger">Email is required and should be valid</div>
+        </div>
+        <div class="form-group">
+          <label for="birthday">Birthday</label>
+          <input type="date" id="birthday" name="birthday" class="form-control" [(ngModel)]="contact.birthday" pattern="(19|20)\d{2}\-((0[1-9])|(1[0-2]))\-((0[1-9])|([12][0-9])|(3[01]))" #birthday="ngModel"/>
+          <div [hidden]="birthday.valid || birthday.pristine" class="alert alert-danger">Birthday should be formatted: yyyy-mm-dd</div>
+        </div>
+      </div>
+  
+      <div *ngIf="contact.category == 'Supplier'">
+        <div class="form-group">
+          <label for="telephone">Telephone</label>
+          <input type="number" id="telephone" name="telephone" class="form-control" [(ngModel)]="contact.telephone" required pattern="\d{7,12}" minlength="7" maxlength="12" #telephone="ngModel"/>
+          <div [hidden]="telephone.valid || telephone.pristine" class="alert alert-danger">Telephone should be at least 7 and no more than 12 digits</div>
+        </div>       
+      </div>
+  
+      <div class="form-group">
+        <button type="submit" class="btn btn-success" [disabled]="!contactForm.form.valid">Update</button>
+     </div>
+  
+</form>
+
+</div>

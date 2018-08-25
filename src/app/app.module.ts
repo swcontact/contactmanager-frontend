@@ -9,6 +9,8 @@ import { ContactComponent } from './contact/contact.component';
 import { ListComponent } from './list/list.component';
 import { CreateComponent } from './create/create.component';
 import { EditComponent } from './edit/edit.component';
+import { DeleteComponent } from './delete/delete.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -17,6 +19,8 @@ import { EditComponent } from './edit/edit.component';
     ListComponent,
     CreateComponent,
     EditComponent,
+    DeleteComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,

@@ -8,12 +8,6 @@
 .ng-invalid:not(form)  {
     border-left: 5px solid #a94442; /* red */
 }
-.sub-title .row .col-sm-6 span {
-    font-weight: bolder;
-}
-.sub-title .row .col-sm-6 a {
-    float: right;
-}
 .form-group button {
     margin-right: 20px;
 }

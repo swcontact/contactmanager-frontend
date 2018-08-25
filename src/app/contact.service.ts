@@ -20,16 +20,34 @@ export class ContactService {
     return this.http.get(url).pipe(catchError(this.handleError));
   }
 
+  public getPage(url, page, size = 5) {
+    return this.http.get(url + "/page/" + page + "/?size=" + size).pipe(catchError(this.handleError));
+  }
+
   public getContact(url, id) {
     return this.http.get(url + "/" + id).pipe(catchError(this.handleError));
   }
+  
+  public deleteContact(url, id) {
+    return this.http.delete(url + "/" + id).pipe(catchError(this.handleError));
+  }
 
   public createContact(url, data) {
-    console.log(url);
-    console.log(data);
+    //console.log(url);
+    //console.log(data);
     const httpHeader = new HttpHeaders({'Content-Type': 'application/json'});
     const httpOptions = { headers: httpHeader };
     let result = this.http.post<any>(url, data, httpOptions).pipe(catchError(this.handleError));
+    console.log(result);
+    return result;
+  }
+
+  public updateContact(url, data) {
+    //console.log(url);
+    //console.log(data);
+    const httpHeader = new HttpHeaders({'Content-Type': 'application/json'});
+    const httpOptions = { headers: httpHeader };
+    let result = this.http.put<any>(url, data, httpOptions).pipe(catchError(this.handleError));
     console.log(result);
     return result;
   }

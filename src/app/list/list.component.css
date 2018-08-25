@@ -4,6 +4,10 @@
 }
 .next
 {
+    text-align: left;
+}
+.prev
+{
     text-align: right;
 }
 .action-link

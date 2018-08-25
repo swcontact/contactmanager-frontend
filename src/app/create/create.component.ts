@@ -14,6 +14,8 @@ export class CreateComponent implements OnInit {
 
   config: any;
   contact: Contact;
+  saved: boolean = false;
+  somethingWrong: string = "";
 
   firstNameValid: boolean = true;
   lastNameValid: boolean = true;
@@ -21,8 +23,9 @@ export class CreateComponent implements OnInit {
   birthdayValid: boolean = true;
   telephoneValid: boolean = true;
 
-  profileValid: boolean = true;
+  contactValid: boolean = true;
   formValid: boolean = true;
+  lastSavedName: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -42,11 +45,16 @@ export class CreateComponent implements OnInit {
   }
 
   onChangeOfContactCategory(val) {
-    this.contact.Category = val;
+    this.contact.category = val;
+    this.saved = false;
   }
 
   newContact() {
     this.contact = new Contact();
+  }
+
+  onChange() {
+    this.saved = false;
   }
 
   onSubmit() {
@@ -56,54 +64,67 @@ export class CreateComponent implements OnInit {
     this.validateBirthday();
     this.validateTelephone();
 
-    if (this.contact.Category == "Customer") {
-      this.profileValid = this.emailValid && this.birthdayValid;
+    if (this.contact.category == "Customer") {
+      this.contactValid = this.emailValid && this.birthdayValid;
+      this.contact.telephone = "";
     } else {
-      this.profileValid = this.telephoneValid;
+      this.contactValid = this.telephoneValid;
+      this.contact.email = "";
+      this.contact.birthday = "";
     }
-    this.formValid = this.firstNameValid && this.lastNameValid && this.profileValid;
+    this.formValid = this.firstNameValid && this.lastNameValid && this.contactValid;
 
     if (this.formValid) {
-      this.service.createContact(
-        this.config.url + this.config.createContact, 
-        this.contact
-      ).subscribe(result => {
-        console.log(result);
-        this.newContact();
-      });
+      try {
+        this.somethingWrong = "";
+        this.saved = false;
+        this.service.createContact(
+          this.config.url, 
+          this.contact
+        ).subscribe(result => {
+          //console.log(result);
+          this.saved = true;
+          this.lastSavedName = `${this.contact.firstName} ${this.contact.lastName}`;
+          this.contact.id = 0;
+          //this.newContact();
+          //location.href = "/list";
+        });
+      } catch (e) {
+        this.somethingWrong = "Ooop! Something wrong! " + e;
+      }
     }
   }
 
   validateFirstName() {
     this.firstNameValid = true;
-    if (this.contact.FirstName.trim() == '') {
+    if (this.contact.firstName.trim() == '') {
       this.firstNameValid = false;
     }
   }
   validateLastName() {
     this.lastNameValid = true;
-    if (this.contact.LastName.trim() == '') {
+    if (this.contact.lastName.trim() == '') {
       this.lastNameValid = false;
     }
   }
   validateEmail() {
     this.emailValid = true;
     let filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-    if (!filter.test(this.contact.Email)) {
+    if (!filter.test(this.contact.email)) {
       this.emailValid = false;
     }
   }
   validateBirthday() {
     this.birthdayValid = true;
     let filter = /^(19|20)\d{2}\-((0[1-9])|(1[0-2]))\-((0[1-9])|([12][0-9])|(3[01]))$/;
-    if (this.contact.Birthday !== '' && !filter.test(this.contact.Birthday)) {
+    if (this.contact.birthday !== '' && !filter.test(this.contact.birthday)) {
       this.birthdayValid = false;
     }
   }
   validateTelephone() {
     this.telephoneValid = true;
     let filter = /^\d{7,12}$/;
-    if (!filter.test(this.contact.Telephone)) {
+    if (!filter.test(this.contact.telephone)) {
       this.telephoneValid = false;
     }
   }
