@@ -14,7 +14,10 @@ export class EditComponent implements OnInit {
   config: any;
   contact: Contact;
   contactId: number;
+  lastContact: any;
+  noChange: boolean = false;
   somethingWrong: string = "";
+  loading: boolean = true;
 
   firstNameValid: boolean = true;
   lastNameValid: boolean = true;
@@ -32,6 +35,7 @@ export class EditComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.loading = true;
     try {
       this.contact = new Contact();
       this.contactId = +this.route.snapshot.paramMap.get('id');
@@ -42,11 +46,13 @@ export class EditComponent implements OnInit {
       this.service.getConfig().subscribe(config => {
         this.config = config;
       }, err => {
+        this.loading = false;
         this.somethingWrong = "Getting config file failed. " + err;
       }, () => {
         this.getContact();
       });
     } catch (e) {
+      this.loading = false;
       this.somethingWrong = "Ooop! Something wrong! " + e;
     }
   }
@@ -59,9 +65,14 @@ export class EditComponent implements OnInit {
         } else {
           this.somethingWrong = "Contact is empty!";
         }
+        this.loading = false;
       }, err => {
+        this.loading = false;
         this.somethingWrong = 'Server error: Getting contact failed! ' + err;
-      }, () => {});
+      }, () => {
+        this.loading = false;
+        this.lastContact = Object.assign({}, this.contact);
+      });
     } catch (e) {
       this.somethingWrong = "Ooop! Something wrong! " + e;
     }
@@ -75,6 +86,10 @@ export class EditComponent implements OnInit {
     try{
       this.somethingWrong = '';
       this.contact.trimWhiteSpace();
+      this.noChange = !this.contact.isChanged(this.lastContact);
+      if (this.noChange) {
+        return;
+      }
 
       this.firstNameValid = this.contact.validateFirstName();
       this.lastNameValid = this.contact.validateLastName();

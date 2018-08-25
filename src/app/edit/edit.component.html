@@ -38,7 +38,7 @@
   </div>
 </div>
 
-<div class="container">
+<div class="container" *ngIf="!loading">
   <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
     <input type="hidden" id="id" name="id" [(ngModel)]="contact.id" />
       
@@ -69,7 +69,7 @@
         </div>
         <div class="form-group">
           <label for="birthday">Birthday</label>
-          <input type="date" id="birthday" name="birthday" class="form-control" [(ngModel)]="contact.birthday" pattern="(19|20)\d{2}\-((0[1-9])|(1[0-2]))\-((0[1-9])|([12][0-9])|(3[01]))" #birthday="ngModel"/>
+          <input type="date" id="birthday" name="birthday" class="form-control" [ngModel]="contact.birthday | date:'yyyy-MM-dd'" (ngModelChange)="contact.birthday = $event" pattern="(19|20)\d{2}\-((0[1-9])|(1[0-2]))\-((0[1-9])|([12][0-9])|(3[01]))" #birthday="ngModel"/>
           <div [hidden]="birthday.valid || birthday.pristine" class="alert alert-danger">Birthday should be formatted: yyyy-mm-dd</div>
         </div>
       </div>
@@ -84,8 +84,17 @@
   
       <div class="form-group">
         <button type="submit" class="btn btn-success" [disabled]="!contactForm.form.valid">Update</button>
+        <span class="contact-saved" *ngIf="noChange">
+          <span class="text-warning">
+            Please change any field then update, or click <a routerLink="/list">Back to List</a> to see contact list.
+          </span>
+        </span>
      </div>
   
 </form>
 
+</div>
+
+<div class="container" *ngIf="loading">
+  <p>Please wait. I am loading ......</p>
 </div>

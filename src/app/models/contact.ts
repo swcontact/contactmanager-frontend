@@ -36,21 +36,42 @@ export class Contact {
     }
 
     trimWhiteSpace() {
-        this.firstName = (this.firstName == null ? '' : this.firstName);
-        this.lastName = (this.lastName == null ? '' : this.lastName);
-        this.category = (this.category == null ? '' : this.category);
-        this.contact = (this.contact == null ? '' : this.contact);
-        this.email = (this.email == null ? '' : this.email);
-        this.birthday = (this.birthday == null ? '' : this.birthday);
-        this.telephone = (this.telephone == null ? '' : this.telephone);
+        this.removeBothEndWhiteSpace(this);
+    }
 
-        this.firstName = this.firstName.toString().replace(/^\s+|\s+$/gm,'');
-        this.lastName = this.lastName.toString().replace(/^\s+|\s+$/gm,'');
-        this.category = this.category.toString().replace(/^\s+|\s+$/gm,'');
-        this.contact = this.contact.toString().replace(/^\s+|\s+$/gm,'');
-        this.email = this.email.toString().replace(/^\s+|\s+$/gm,'');
-        this.birthday = this.birthday.toString().replace(/^\s+|\s+$/gm,'');
-        this.telephone = this.telephone.toString().replace(/^\s+|\s+$/gm,'');
+    private removeBothEndWhiteSpace (contact: any) {
+        contact.firstName = (contact.firstName == undefined || contact.firstName == null ? '' : contact.firstName);
+        contact.lastName = (contact.lastName == undefined || contact.lastName == null ? '' : contact.lastName);
+        contact.category = (contact.category == undefined || contact.category == null ? '' : contact.category);
+        contact.contact = (contact.contact == undefined || contact.contact == null ? '' : contact.contact);
+        contact.email = (contact.email == undefined || contact.email == null ? '' : contact.email);
+        contact.birthday = (contact.birthday == undefined || contact.birthday == null ? '' : contact.birthday);
+        contact.telephone = (contact.telephone == undefined || contact.telephone == null ? '' : contact.telephone);
+
+        contact.firstName = contact.firstName.toString().replace(/^\s+|\s+$/gm,'');
+        contact.lastName = contact.lastName.toString().replace(/^\s+|\s+$/gm,'');
+        contact.category = contact.category.toString().replace(/^\s+|\s+$/gm,'');
+        contact.contact = contact.contact.toString().replace(/^\s+|\s+$/gm,'');
+        contact.email = contact.email.toString().replace(/^\s+|\s+$/gm,'');
+        contact.birthday = contact.birthday.toString().replace(/^\s+|\s+$/gm,'');
+        contact.telephone = contact.telephone.toString().replace(/^\s+|\s+$/gm,'');
+    }
+
+    isChanged(contact: any) {
+        this.removeBothEndWhiteSpace(this);
+        this.removeBothEndWhiteSpace(contact);
+        if (
+            contact.firstName == undefined || this.firstName != contact.firstName
+            || contact.lastName == undefined || this.lastName != contact.lastName
+            || contact.category == undefined || this.category != contact.category
+            || contact.contact == undefined || this.contact != contact.contact
+            || contact.email == undefined || this.email != contact.email
+            || contact.birthday == undefined || this.birthday != contact.birthday
+            || contact.telephone == undefined || this.telephone != contact.telephone)
+        {
+            return true;
+        }
+        return false;
     }
 
     validateFirstName() {

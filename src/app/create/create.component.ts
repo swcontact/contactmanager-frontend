@@ -12,6 +12,8 @@ export class CreateComponent implements OnInit {
 
   config: any;
   contact: Contact;
+  lastContact: any;
+  noChange: boolean = false;
   saved: boolean = false;
   somethingWrong: string = "";
 
@@ -29,6 +31,7 @@ export class CreateComponent implements OnInit {
 
   ngOnInit() {
     this.contact = new Contact();
+    this.lastContact = new Contact();
 
     this.service.getConfig().subscribe(config => {
       this.config = config;
@@ -51,6 +54,11 @@ export class CreateComponent implements OnInit {
   onSubmit() {
     this.somethingWrong = '';
     this.contact.trimWhiteSpace();
+    this.noChange = !this.contact.isChanged(this.lastContact);
+    if (this.noChange) {
+      this.saved = false;
+      return;
+    }    
 
     this.firstNameValid = this.contact.validateFirstName();
     this.lastNameValid = this.contact.validateLastName();
@@ -79,7 +87,7 @@ export class CreateComponent implements OnInit {
         }, err => {
           this.somethingWrong = 'Server error: Save contact failed! ' + err;
         }, () => {
-
+          this.lastContact = Object.assign({}, this.contact);
         });
       } catch (e) {
         this.somethingWrong = "Ooop! Something wrong! " + e;

@@ -84,16 +84,19 @@
   
       <div class="form-group">
         <button type="submit" class="btn btn-success" [disabled]="!contactForm.form.valid">Submit</button>
+
+        <span class="contact-saved" *ngIf="saved">
+          <span class="text-success">
+            Saved (<strong>{{lastSavedName}}</strong>), please keep adding next contact, or click <a routerLink="/list">Back to List</a> to see contact list.
+          </span>
+        </span>
+        <span class="contact-saved" *ngIf="noChange">
+          <span class="text-warning">
+            Please change any field then Submit, or click <a routerLink="/list">Back to List</a> to see contact list.
+          </span>
+        </span>
      </div>
   
 </form>
 
-</div>
-
-<div class="container contact-saved" *ngIf="saved">
-  <div class="row">
-    <div class="col text-success">
-      Saved (<strong>{{lastSavedName}}</strong>), please add next contact. Click <a routerLink="/list">Back to List</a> to see contact list.
-    </div>
-  </div>
 </div>

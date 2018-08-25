@@ -49,18 +49,19 @@ export class ContactService {
   }
 
   private handleError(error: HttpErrorResponse) {
+    let errorMessage = '';
     if (error.error instanceof ErrorEvent) {
       // A client-side or network error occurred. Handle it accordingly.
-      console.log('An error occurred:', error.error.message);
+      errorMessage = 'An error occurred: '+ error.error.message;
     } else {
       // The backend returned an unsuccessful response code.
       // The response body may contain clues as to what went wrong,
-      console.log(
+      errorMessage =
         `Backend returned code ${error.status}, ` +
-        `body was: ${error.message}`);
+        `body was: ${error.message}`;
     }
     // return an observable with a user-facing error message
-    return throwError( 'Something bad happened; please try again later.' );
+    return throwError( 'Something bad happened; please try again later. ' + errorMessage );
   };
 
 }
