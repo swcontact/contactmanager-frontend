@@ -73,6 +73,7 @@ export class EditComponent implements OnInit {
 
   onSubmit() {
     try{
+      this.somethingWrong = '';
       this.contact.trimWhiteSpace();
 
       this.firstNameValid = this.contact.validateFirstName();

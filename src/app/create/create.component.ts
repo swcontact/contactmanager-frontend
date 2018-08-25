@@ -49,6 +49,7 @@ export class CreateComponent implements OnInit {
   }
 
   onSubmit() {
+    this.somethingWrong = '';
     this.contact.trimWhiteSpace();
 
     this.firstNameValid = this.contact.validateFirstName();

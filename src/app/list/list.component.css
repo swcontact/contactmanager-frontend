@@ -18,3 +18,10 @@ table tr
 {
     border-bottom: 1px solid lightgrey;
 }
+input#page
+{
+    width: 45px;
+    margin-left: 5px;
+    vertical-align: bottom;
+    display: inline-flex;
+}

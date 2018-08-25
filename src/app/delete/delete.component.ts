@@ -67,6 +67,7 @@ export class DeleteComponent implements OnInit {
   }
 
   onDelete(contact: any) {
+    this.somethingWrong = '';
     try {
       let yesno = confirm(`Do you really want to delete <${contact.firstName} ${contact.lastName}>?`);
       if (yesno) {

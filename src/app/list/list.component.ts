@@ -18,6 +18,8 @@ export class ListComponent implements OnInit {
   contacts: any;
   loading: boolean = false;
 
+  jumpTo: number = 1;
+
   somethingWrong: string = "";
 
   constructor (private service: ContactService) { }
@@ -39,7 +41,13 @@ export class ListComponent implements OnInit {
     }
   }
 
+  jumpToPage (page) {
+    if (page == this.currentPage || page < 1 || page > this.totalPage) return;
+    this.gotoPage(page);
+  }
+
   gotoPage(page) {
+    this.somethingWrong = '';
     try{
       this.loading = true;
       this.service.getPage(this.config['url'], page, this.pageSize).subscribe(data => {

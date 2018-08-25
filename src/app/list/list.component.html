@@ -14,7 +14,7 @@
   </div>
 </div>
 
-<div *ngIf="totalCount > 0">
+<div class="container" *ngIf="totalCount > 0">
   <table class="table table-striped">
     <thead>
       <tr>
@@ -42,9 +42,17 @@
   </table>
   <div class="container">
     <div class="row">
-      <div class="col prev"><button class="btn btn-primary btn-sm" [disabled]="previousPage == currentPage" (click)=gotoPage(previousPage)>Prev</button></div>
-      <div class="col middle">Page {{currentPage}} of {{totalPage}}, Total Records: {{totalCount}}</div>
-      <div class="col next"><button class="btn btn-primary btn-sm" [disabled]="nextPage == currentPage" (click)=gotoPage(nextPage)>Next</button></div>
+      <div class="col prev"><button class="btn btn-primary btn-sm" [disabled]="previousPage == currentPage" (click)=gotoPage(previousPage) [title]="previousPage">Prev</button></div>
+      <div class="col middle">
+        <form (ngSubmit)="gotoPage(jumpTo)" #pageForm="ngForm">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary btn-sm" [disabled]="currentPage == jumpTo || jumpTo < 1 || jumpTo > totalPage" [title]="jumpTo">Jump to</button>
+            <input class="form-control form-control-sm" type="number" id="page" name="page" [(ngModel)]="jumpTo" min="1" max="{{totalPage}}" pattern="^\d+$" />
+          </div>  
+        </form>
+        Page {{currentPage}}/{{totalPage}}, Records: {{totalCount}}
+      </div>
+      <div class="col next"><button class="btn btn-primary btn-sm" [disabled]="nextPage == currentPage" (click)=gotoPage(nextPage) [title]="nextPage">Next</button></div>
     </div>
   </div>
 </div>
