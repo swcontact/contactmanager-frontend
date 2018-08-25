@@ -48,21 +48,6 @@ export class DeleteComponent implements OnInit {
     } catch (e) {
       this.somethingWrong = "Ooop! Something wrong! " + e;
     }
-
-    /*
-    this.storedContact = sessionStorage.getItem('delete');
-    this.url = sessionStorage.getItem('url');
-    //remove them immediately
-    sessionStorage.clear();
-
-    if (this.storedContact && this.url) {
-      this.properWay = true;
-      this.contact = JSON.parse(this.storedContact);
-      //console.log(this.contact);
-    }else{
-      this.properWay = false;
-    }
-    */
   }
 
   getContact(): void {
@@ -80,22 +65,7 @@ export class DeleteComponent implements OnInit {
       this.somethingWrong = "Ooop! Something wrong! " + e;
     }
   }
-/*
-  asignContact(contact: any) {
-    try {
-      this.contact = new Contact;
-      this.contact.id = contact.id;
-      this.contact.firstName = contact.firstName;
-      this.contact.lastName = contact.lastName;
-      this.contact.category = contact.category;
-      this.contact.email = contact.email;
-      this.contact.birthday = contact.birthday;
-      this.contact.telephone = contact.telephone;
-      this.contact.contact = contact.contact;
-    } catch (e) {
-      this.somethingWrong = "Ooop! Something wrong! " + e;
-    }
-  }*/
+
   onDelete(contact: any) {
     try {
       let yesno = confirm(`Do you really want to delete <${contact.firstName} ${contact.lastName}>?`);

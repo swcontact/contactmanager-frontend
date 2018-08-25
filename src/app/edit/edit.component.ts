@@ -66,40 +66,20 @@ export class EditComponent implements OnInit {
       this.somethingWrong = "Ooop! Something wrong! " + e;
     }
   }
-/*
-  asignContact(contact: any) {
-    try {
-      if (contact.id == undefined) {
-        throw "Server returned a non contact object.";
-      }
-      this.contact.id = contact.id;
-      this.contact.firstName = (contact.firstName !== undefined ? contact.firstName : '');
-      this.contact.lastName = (contact.lastName !== undefined ? contact.lastName : '');
-      this.contact.category = (contact.category !== undefined ? contact.category : 'Customer');
-      this.contact.email = (contact.email !== undefined ? contact.email : '');
-      this.contact.birthday = (contact.birthday !== undefined ? contact.birthday : '');
-      this.contact.telephone = (contact.telephone !== undefined ? contact.telephone : '');
-      this.contact.contact = (contact.contact !== undefined ? contact.contact : '');
-    } catch (e) {
-      this.somethingWrong = "Ooop! Something wrong! " + e;
-    }
-  }
-*/
+
   onChangeOfContactCategory(val) {
     this.contact.category = val;
   }
-/*
-  newContact() {
-    this.contact = new Contact();
-  }
-*/
+
   onSubmit() {
     try{
-      this.validateFirstName();
-      this.validateLastName();
-      this.validateEmail();
-      this.validateBirthday();
-      this.validateTelephone();
+      this.contact.trimWhiteSpace();
+
+      this.firstNameValid = this.contact.validateFirstName();
+      this.lastNameValid = this.contact.validateLastName();
+      this.emailValid = this.contact.validateEmail();
+      this.birthdayValid = this.contact.validateBirthday();
+      this.telephoneValid = this.contact.validateTelephone();
 
       if (this.contact.category == "Customer") {
         this.contactValid = this.emailValid && this.birthdayValid;
@@ -114,45 +94,15 @@ export class EditComponent implements OnInit {
           this.contact
         ).subscribe(result => {
           location.href = "/list";
+        }, err => {
+          this.somethingWrong = "Server error: update contact failed! " + err;
+        }, () => {
+
         });
       }
     } catch (e) {
       this.somethingWrong = "Ooop! Something wrong! " + e;
     }
 
-  }
-
-  validateFirstName() {
-    this.firstNameValid = true;
-    if (this.contact.firstName.trim() == '') {
-      this.firstNameValid = false;
-    }
-  }
-  validateLastName() {
-    this.lastNameValid = true;
-    if (this.contact.lastName.trim() == '') {
-      this.lastNameValid = false;
-    }
-  }
-  validateEmail() {
-    this.emailValid = true;
-    let filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-    if (!filter.test(this.contact.email)) {
-      this.emailValid = false;
-    }
-  }
-  validateBirthday() {
-    this.birthdayValid = true;
-    let filter = /^(19|20)\d{2}\-((0[1-9])|(1[0-2]))\-((0[1-9])|([12][0-9])|(3[01]))$/;
-    if (this.contact.birthday !== '' && !filter.test(this.contact.birthday)) {
-      this.birthdayValid = false;
-    }
-  }
-  validateTelephone() {
-    this.telephoneValid = true;
-    let filter = /^\d{7,12}$/;
-    if (!filter.test(this.contact.telephone)) {
-      this.telephoneValid = false;
-    }
   }
 }

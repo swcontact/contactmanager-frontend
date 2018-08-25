@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-//import { ActivatedRoute } from '@angular/router';
-//import { Location } from '@angular/common';
 import { ContactService } from '../contact.service';
 import { Contact } from '../models/contact';
 
@@ -27,14 +25,7 @@ export class CreateComponent implements OnInit {
   formValid: boolean = true;
   lastSavedName: string = '';
 
-  constructor(
-//    private route: ActivatedRoute,
-    private service: ContactService
-    //private location: Location
-  ) 
-  {
-
-  }
+  constructor(private service: ContactService) { }
 
   ngOnInit() {
     this.contact = new Contact();
@@ -52,21 +43,19 @@ export class CreateComponent implements OnInit {
     this.contact.category = val;
     this.saved = false;
   }
-/*
-  newContact() {
-    this.contact = new Contact();
-  }
-*/
+
   onChange() {
     this.saved = false;
   }
 
   onSubmit() {
-    this.validateFirstName();
-    this.validateLastName();
-    this.validateEmail();
-    this.validateBirthday();
-    this.validateTelephone();
+    this.contact.trimWhiteSpace();
+
+    this.firstNameValid = this.contact.validateFirstName();
+    this.lastNameValid = this.contact.validateLastName();
+    this.emailValid = this.contact.validateEmail();
+    this.birthdayValid = this.contact.validateBirthday();
+    this.telephoneValid = this.contact.validateTelephone();
 
     if (this.contact.category == "Customer") {
       this.contactValid = this.emailValid && this.birthdayValid;
@@ -94,40 +83,6 @@ export class CreateComponent implements OnInit {
       } catch (e) {
         this.somethingWrong = "Ooop! Something wrong! " + e;
       }
-    }
-  }
-
-  validateFirstName() {
-    this.firstNameValid = true;
-    if (this.contact.firstName.trim() == '') {
-      this.firstNameValid = false;
-    }
-  }
-  validateLastName() {
-    this.lastNameValid = true;
-    if (this.contact.lastName.trim() == '') {
-      this.lastNameValid = false;
-    }
-  }
-  validateEmail() {
-    this.emailValid = true;
-    let filter = /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-    if (!filter.test(this.contact.email)) {
-      this.emailValid = false;
-    }
-  }
-  validateBirthday() {
-    this.birthdayValid = true;
-    let filter = /^(19|20)\d{2}\-((0[1-9])|(1[0-2]))\-((0[1-9])|([12][0-9])|(3[01]))$/;
-    if (this.contact.birthday !== '' && !filter.test(this.contact.birthday)) {
-      this.birthdayValid = false;
-    }
-  }
-  validateTelephone() {
-    this.telephoneValid = true;
-    let filter = /^\d{7,12}$/;
-    if (!filter.test(this.contact.telephone)) {
-      this.telephoneValid = false;
     }
   }
 }
