@@ -29,18 +29,22 @@ export class EditComponent implements OnInit {
     private route: ActivatedRoute,
     private service: ContactService,
     private location: Location
-  ) 
-  {
-    this.newContact();
-  }
+  ) { }
 
   ngOnInit() {
     try {
-      this.service
-        .getConfig()
-        .subscribe(config => {
-          this.config = config;
-          this.getContact();
+      this.contact = new Contact();
+      this.contactId = +this.route.snapshot.paramMap.get('id');
+      if (this.contactId <= 0) {
+        throw `Invalid contact id: (${this.contactId})`;
+      }
+
+      this.service.getConfig().subscribe(config => {
+        this.config = config;
+      }, err => {
+        this.somethingWrong = "Getting config file failed. " + err;
+      }, () => {
+        this.getContact();
       });
     } catch (e) {
       this.somethingWrong = "Ooop! Something wrong! " + e;
@@ -49,46 +53,46 @@ export class EditComponent implements OnInit {
 
   getContact(): void {
     try {
-      this.contactId = +this.route.snapshot.paramMap.get('id');
-
-      if (this.contactId > 0) {
-        this.service.getContact(this.config['url'], this.contactId)
-        .subscribe(contact => {
-          //console.log(contact);
-          if (contact !== undefined && contact !== null){
-            this.asignContact(contact);
-          }
-        });
-      }
+      this.service.getContact(this.config['url'], this.contactId).subscribe(contact => {
+        if (contact !== undefined && contact !== null){
+          this.contact.asignContact(contact);
+        } else {
+          this.somethingWrong = "Contact is empty!";
+        }
+      }, err => {
+        this.somethingWrong = 'Server error: Getting contact failed! ' + err;
+      }, () => {});
     } catch (e) {
       this.somethingWrong = "Ooop! Something wrong! " + e;
     }
-
   }
-
+/*
   asignContact(contact: any) {
     try {
+      if (contact.id == undefined) {
+        throw "Server returned a non contact object.";
+      }
       this.contact.id = contact.id;
-      this.contact.firstName = contact.firstName;
-      this.contact.lastName = contact.lastName;
-      this.contact.category = contact.category;
-      this.contact.email = contact.email;
-      this.contact.birthday = contact.birthday;
-      this.contact.telephone = contact.telephone;
-      this.contact.contact = contact.contact;
+      this.contact.firstName = (contact.firstName !== undefined ? contact.firstName : '');
+      this.contact.lastName = (contact.lastName !== undefined ? contact.lastName : '');
+      this.contact.category = (contact.category !== undefined ? contact.category : 'Customer');
+      this.contact.email = (contact.email !== undefined ? contact.email : '');
+      this.contact.birthday = (contact.birthday !== undefined ? contact.birthday : '');
+      this.contact.telephone = (contact.telephone !== undefined ? contact.telephone : '');
+      this.contact.contact = (contact.contact !== undefined ? contact.contact : '');
     } catch (e) {
       this.somethingWrong = "Ooop! Something wrong! " + e;
     }
   }
-
+*/
   onChangeOfContactCategory(val) {
     this.contact.category = val;
   }
-
+/*
   newContact() {
     this.contact = new Contact();
   }
-
+*/
   onSubmit() {
     try{
       this.validateFirstName();
@@ -109,7 +113,6 @@ export class EditComponent implements OnInit {
           this.config.url + '/' + this.contactId,
           this.contact
         ).subscribe(result => {
-          //console.log(result);
           location.href = "/list";
         });
       }

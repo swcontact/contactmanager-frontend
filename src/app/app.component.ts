@@ -7,5 +7,5 @@ import { Component, Output } from '@angular/core';
 })
 
 export class AppComponent {
-  title = 'app';
+  title = 'Contact Manager';
 }

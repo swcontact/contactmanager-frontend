@@ -33,22 +33,18 @@ export class ContactService {
   }
 
   public createContact(url, data) {
-    //console.log(url);
-    //console.log(data);
     const httpHeader = new HttpHeaders({'Content-Type': 'application/json'});
     const httpOptions = { headers: httpHeader };
     let result = this.http.post<any>(url, data, httpOptions).pipe(catchError(this.handleError));
-    console.log(result);
+
     return result;
   }
 
   public updateContact(url, data) {
-    //console.log(url);
-    //console.log(data);
     const httpHeader = new HttpHeaders({'Content-Type': 'application/json'});
     const httpOptions = { headers: httpHeader };
     let result = this.http.put<any>(url, data, httpOptions).pipe(catchError(this.handleError));
-    console.log(result);
+
     return result;
   }
 
@@ -61,7 +57,7 @@ export class ContactService {
       // The response body may contain clues as to what went wrong,
       console.log(
         `Backend returned code ${error.status}, ` +
-        `body was: ${error.error}`);
+        `body was: ${error.message}`);
     }
     // return an observable with a user-facing error message
     return throwError( 'Something bad happened; please try again later.' );

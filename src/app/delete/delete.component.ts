@@ -11,13 +11,11 @@ import { Contact } from '../models/contact';
 })
 export class DeleteComponent implements OnInit {
 
-  contact: Contact;
-  storedContact: string;
-  properWay: boolean = false;
   config: any;
-  somethingWrong: string = "";
-
+  contact: Contact;
   contactId: number;
+  somethingWrong: string = "";
+  properWay: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -26,22 +24,29 @@ export class DeleteComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.contactId = +this.route.snapshot.paramMap.get('id');
-    if (+sessionStorage.getItem("delete") != this.contactId) {
-      this.properWay = false;
-    }else{
-      this.properWay = true;
-      sessionStorage.clear();
-      try {
-        this.service
-          .getConfig()
-          .subscribe(config => {
-            this.config = config;
-            this.getContact();
-        });
-      } catch (e) {
-        this.somethingWrong = "Ooop! Something wrong! " + e;
+    try {
+      this.contact = new Contact();
+      this.contactId = +this.route.snapshot.paramMap.get('id');
+      if (this.contactId <= 0) {
+        throw `Invalid contact id: (${this.contactId})`;
       }
+
+      if (+sessionStorage.getItem("delete") != this.contactId) {
+        this.properWay = false;
+        throw "You cannot delete a record in this way!";
+      }else{
+        this.properWay = true;
+        sessionStorage.clear();
+        this.service.getConfig().subscribe(config => {
+          this.config = config;
+        }, err => {
+          this.somethingWrong = "Getting config file failed. " + err;
+        }, () => {
+          this.getContact();
+        });
+      }
+    } catch (e) {
+      this.somethingWrong = "Ooop! Something wrong! " + e;
     }
 
     /*
@@ -62,23 +67,20 @@ export class DeleteComponent implements OnInit {
 
   getContact(): void {
     try {
-      this.contactId = +this.route.snapshot.paramMap.get('id');
-
-      if (this.contactId > 0) {
-        this.service.getContact(this.config['url'], this.contactId)
-        .subscribe(contact => {
-          //console.log(contact);
-          if (contact !== undefined && contact !== null){
-            this.asignContact(contact);
-          }
-        });
-      }
+      this.service.getContact(this.config['url'], this.contactId).subscribe(contact => {
+        if (contact !== undefined && contact !== null){
+          this.contact.asignContact(contact);
+        } else {
+          this.somethingWrong = "Contact is empty!";
+        }
+      }, err => {
+        this.somethingWrong = 'Server error: Getting contact failed! ' + err;
+      }, () => {});
     } catch (e) {
       this.somethingWrong = "Ooop! Something wrong! " + e;
     }
-
   }
-
+/*
   asignContact(contact: any) {
     try {
       this.contact = new Contact;
@@ -93,15 +95,12 @@ export class DeleteComponent implements OnInit {
     } catch (e) {
       this.somethingWrong = "Ooop! Something wrong! " + e;
     }
-  }
+  }*/
   onDelete(contact: any) {
     try {
       let yesno = confirm(`Do you really want to delete <${contact.firstName} ${contact.lastName}>?`);
-      //console.log(this.url);
-      //console.log(contact.id);    
       if (yesno) {
         let result = this.service.deleteContact(this.config['url'], contact.id).subscribe(result => {
-          //console.log(result);
           location.href = '/list';
         });
       }

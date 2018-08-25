@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { Location } from '@angular/common';
+//import { ActivatedRoute } from '@angular/router';
+//import { Location } from '@angular/common';
 import { ContactService } from '../contact.service';
 import { Contact } from '../models/contact';
 
@@ -28,31 +28,35 @@ export class CreateComponent implements OnInit {
   lastSavedName: string = '';
 
   constructor(
-    private route: ActivatedRoute,
-    private service: ContactService,
-    private location: Location
+//    private route: ActivatedRoute,
+    private service: ContactService
+    //private location: Location
   ) 
   {
-    this.newContact();
+
   }
 
   ngOnInit() {
-    this.service
-      .getConfig()
-      .subscribe(config => {
-        this.config = config;
-      });
+    this.contact = new Contact();
+
+    this.service.getConfig().subscribe(config => {
+      this.config = config;
+    }, err => {
+      this.somethingWrong = "Getting config file failed. " + err;
+    }, () => {
+
+    });
   }
 
   onChangeOfContactCategory(val) {
     this.contact.category = val;
     this.saved = false;
   }
-
+/*
   newContact() {
     this.contact = new Contact();
   }
-
+*/
   onChange() {
     this.saved = false;
   }
@@ -78,16 +82,14 @@ export class CreateComponent implements OnInit {
       try {
         this.somethingWrong = "";
         this.saved = false;
-        this.service.createContact(
-          this.config.url, 
-          this.contact
-        ).subscribe(result => {
-          //console.log(result);
+        this.service.createContact(this.config.url, this.contact).subscribe(result => {
           this.saved = true;
           this.lastSavedName = `${this.contact.firstName} ${this.contact.lastName}`;
           this.contact.id = 0;
-          //this.newContact();
-          //location.href = "/list";
+        }, err => {
+          this.somethingWrong = 'Server error: Save contact failed! ' + err;
+        }, () => {
+
         });
       } catch (e) {
         this.somethingWrong = "Ooop! Something wrong! " + e;

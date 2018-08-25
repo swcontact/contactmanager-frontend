@@ -5,7 +5,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { ContactComponent } from './contact/contact.component';
+
 import { ListComponent } from './list/list.component';
 import { CreateComponent } from './create/create.component';
 import { EditComponent } from './edit/edit.component';
@@ -15,7 +15,6 @@ import { PageNotFoundComponent } from './page-not-found/page-not-found.component
 @NgModule({
   declarations: [
     AppComponent,
-    ContactComponent,
     ListComponent,
     CreateComponent,
     EditComponent,

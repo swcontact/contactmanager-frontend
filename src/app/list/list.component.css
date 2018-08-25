@@ -14,3 +14,7 @@
 {
     padding: 0px 5px;
 }
+table tr 
+{
+    border-bottom: 1px solid lightgrey;
+}

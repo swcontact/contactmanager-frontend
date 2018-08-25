@@ -1,9 +1,15 @@
-<a routerLink="/create">Create New Contact</a>
+<div class="container" *ngIf="somethingWrong.length <= 0">
+  <div class="row">
+    <div class="col">
+      <a routerLink="/create">Create New Contact</a>
+    </div>
+  </div>
+</div>
 
 <div class="container" *ngIf="somethingWrong.length > 0">
   <div class="row">
     <div class="col text-danger">
-      {{somethingWrong}}, Please refresh/reload the page.
+      {{somethingWrong}}.
     </div>
   </div>
 </div>
@@ -43,11 +49,11 @@
   </div>
 </div>
 
-<div *ngIf="totalCount <= 0 && !loading">
+<div class="container" *ngIf="totalCount <= 0 && !loading && somethingWrong.length < 1">
   <p>No record found. Please create new contact by clicking above link.</p>
 </div>
 
-<div *ngIf="loading">
+<div class="container" *ngIf="loading">
   <p>Please wait. I am loading ......</p>
 </div>
   
