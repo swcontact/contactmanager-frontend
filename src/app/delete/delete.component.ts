@@ -81,19 +81,14 @@ export class DeleteComponent implements OnInit {
     this.deleting = true;
     this.somethingWrong = '';
     try {
-      let yesno = confirm(`Do you really want to delete <${contact.firstName} ${contact.lastName}>?`);
-      if (yesno) {
-        let result = this.service.deleteContact(this.config['url'], contact.id).subscribe(result => {
-          location.href = '/list';
-        }, err => {
-          this.somethingWrong = 'Server error: Deleting contact failed! ' + err;
-          this.deleting = false;
-        }, () => {
-          
-        });
-      } else {
+      this.service.deleteContact(this.config['url'], contact.id).subscribe(result => {
+        location.href = '/list';
+      }, err => {
+        this.somethingWrong = 'Server error: Deleting contact failed! ' + err;
         this.deleting = false;
-      }
+      }, () => {
+        
+      });
     } catch (e) {
       this.somethingWrong = "Ooop! Something wrong! " + e;
       this.deleting = false;
