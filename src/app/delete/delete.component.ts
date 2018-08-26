@@ -91,9 +91,12 @@ export class DeleteComponent implements OnInit {
         }, () => {
           
         });
+      } else {
+        this.deleting = false;
       }
     } catch (e) {
       this.somethingWrong = "Ooop! Something wrong! " + e;
+      this.deleting = false;
     }
   }
 }
