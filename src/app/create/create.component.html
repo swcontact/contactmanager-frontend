@@ -12,7 +12,15 @@
     </div>
   </div>
 </div>
-  
+
+<div class="container" *ngIf="saving">
+  <div class="row">
+    <div class="col">
+      Please wait, I am saving ......
+    </div>
+  </div>
+</div>
+
 <hr>
 
 <div class="container error-message" *ngIf="!formValid">

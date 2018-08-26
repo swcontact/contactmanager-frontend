@@ -73,4 +73,8 @@ export class ListComponent implements OnInit {
    sessionStorage.setItem("delete", id);
   }
 
+  onEdit(id) {
+    sessionStorage.setItem("edit", id);
+  }
+
 }

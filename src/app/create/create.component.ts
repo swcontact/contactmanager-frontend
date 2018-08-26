@@ -15,6 +15,7 @@ export class CreateComponent implements OnInit {
   lastContact: any;
   noChange: boolean = false;
   saved: boolean = false;
+  saving: boolean = false;
   somethingWrong: string = "";
 
   firstNameValid: boolean = true;
@@ -52,11 +53,13 @@ export class CreateComponent implements OnInit {
   }
 
   onSubmit() {
+    this.saving = true;
     this.somethingWrong = '';
     this.contact.trimWhiteSpace();
     this.noChange = !this.contact.isChanged(this.lastContact);
     if (this.noChange) {
       this.saved = false;
+      this.saving = false;
       return;
     }    
 
@@ -86,12 +89,18 @@ export class CreateComponent implements OnInit {
           this.contact.id = 0;
         }, err => {
           this.somethingWrong = 'Server error: Save contact failed! ' + err;
+          this.saving = false;
         }, () => {
           this.lastContact = Object.assign({}, this.contact);
+          this.saving = false;
         });
       } catch (e) {
         this.somethingWrong = "Ooop! Something wrong! " + e;
+        this.saving = false;
       }
+    } else {
+      this.somethingWrong = "Validation failed! ";
+      this.saving = false;
     }
   }
 }

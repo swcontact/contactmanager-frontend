@@ -14,6 +14,14 @@
   </div>
 </div>
 
+<div class="container" *ngIf="totalCount <= 0 && !loading && somethingWrong.length < 1">
+  <p>No record found. Please create new contact by clicking above link.</p>
+</div>
+
+<div class="container" *ngIf="loading">
+  <p>Please wait. I am loading ......</p>
+</div>
+
 <div class="container" *ngIf="totalCount > 0">
   <table class="table table-striped">
     <thead>
@@ -33,7 +41,7 @@
         <td>{{contact.contact}}</td>
         <td>
           <nav>
-            <a class="action-link" routerLink="/edit/{{contact.id}}">Edit</a>
+            <a class="action-link" routerLink="/edit/{{contact.id}}" (click)="onEdit(contact.id)">Edit</a>
             <a class="action-link" routerLink="/delete/{{contact.id}}" (click)="onDelete(contact.id)">Remove</a>
           </nav>
         </td>
@@ -57,11 +65,4 @@
   </div>
 </div>
 
-<div class="container" *ngIf="totalCount <= 0 && !loading && somethingWrong.length < 1">
-  <p>No record found. Please create new contact by clicking above link.</p>
-</div>
-
-<div class="container" *ngIf="loading">
-  <p>Please wait. I am loading ......</p>
-</div>
   

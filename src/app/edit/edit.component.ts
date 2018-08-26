@@ -17,7 +17,9 @@ export class EditComponent implements OnInit {
   lastContact: any;
   noChange: boolean = false;
   somethingWrong: string = "";
+  properWay: boolean = false;
   loading: boolean = true;
+  saving: boolean = false;
 
   firstNameValid: boolean = true;
   lastNameValid: boolean = true;
@@ -43,14 +45,21 @@ export class EditComponent implements OnInit {
         throw `Invalid contact id: (${this.contactId})`;
       }
 
-      this.service.getConfig().subscribe(config => {
-        this.config = config;
-      }, err => {
-        this.loading = false;
-        this.somethingWrong = "Getting config file failed. " + err;
-      }, () => {
-        this.getContact();
-      });
+      if (+sessionStorage.getItem("edit") != this.contactId) {
+        this.properWay = false;
+        throw "You cannot edit a record in this way!";
+      }else{
+        this.properWay = true;
+        sessionStorage.clear();
+        this.service.getConfig().subscribe(config => {
+          this.config = config;
+        }, err => {
+          this.loading = false;
+          this.somethingWrong = "Getting config file failed. " + err;
+        }, () => {
+          this.getContact();
+        });
+      }
     } catch (e) {
       this.loading = false;
       this.somethingWrong = "Ooop! Something wrong! " + e;
@@ -84,10 +93,12 @@ export class EditComponent implements OnInit {
 
   onSubmit() {
     try{
+      this.saving = true;
       this.somethingWrong = '';
       this.contact.trimWhiteSpace();
       this.noChange = !this.contact.isChanged(this.lastContact);
       if (this.noChange) {
+        this.saving = false;
         return;
       }
 
@@ -112,12 +123,17 @@ export class EditComponent implements OnInit {
           location.href = "/list";
         }, err => {
           this.somethingWrong = "Server error: update contact failed! " + err;
+          this.saving = false;
         }, () => {
-
+          
         });
+      } else {
+        this.saving = false;
+        this.somethingWrong = "Validation failed! ";
       }
     } catch (e) {
       this.somethingWrong = "Ooop! Something wrong! " + e;
+      this.saving = false;
     }
 
   }
